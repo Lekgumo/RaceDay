@@ -14,7 +14,7 @@ The system replaces paper-based registration, spreadsheets, and disconnected com
 
 Roles
 
-The system has **two distinct user roles**:
+The system has two distinct user roles**:
 
 Organiser
 Event creators and managers. Can:
