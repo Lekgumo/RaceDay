@@ -1,0 +1,43 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore RaceDay.sln
+
+      - name: Build solution
+        run: dotnet build RaceDay.sln --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test RaceDay.sln --no-build --configuration Release --verbosity normal
+
+      - name: Validate Docs folder
+        run: |
+          if [ ! -d "Docs" ]; then
+            echo "/Docs folder not found!"
+            exit 1
+          fi
+          for f in "ERD.png" "API_Documentation2.0.md" "RACEDAYSQL.sql"; do
+            if [ ! -f "Docs/$f" ]; then
+              echo " Docs/$f missing!"
+              exit 1
+            fi
+          done
+          echo " Docs folder validated successfully."
