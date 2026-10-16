@@ -22,11 +22,14 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore RaceDay.sln
 
-      - name: Build solution
-        run: dotnet build RaceDay.sln --no-restore --configuration Release
+      - name: Build API project
+        run: dotnet build RaceDay/RaceDay.csproj --no-restore --configuration Release
+
+      - name: Build test project
+        run: dotnet build RaceDay.Tests/RaceDay.Tests.csproj --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test RaceDay.sln --no-restore --configuration Release --logger "console;verbosity=normal"
+        run: dotnet test RaceDay.Tests/RaceDay.Tests.csproj --no-build --configuration Release --verbosity normal
 
       - name: Validate Docs folder
         run: |
