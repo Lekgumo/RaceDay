@@ -1,4 +1,4 @@
-name: Build and Test
+﻿name: Build and Test
 
 on:
   push:
@@ -26,18 +26,18 @@ jobs:
         run: dotnet build RaceDay.sln --no-restore --configuration Release
 
       - name: Run tests
-  run: dotnet test RaceDay.sln --no-restore --configuration Release --logger "console;verbosity=normal"
+        run: dotnet test RaceDay.sln --no-restore --configuration Release --logger "console;verbosity=normal"
 
       - name: Validate Docs folder
         run: |
           if [ ! -d "Docs" ]; then
-            echo "/Docs folder not found!"
+            echo "❌ /Docs folder not found!"
             exit 1
           fi
           for f in "ERD.png" "API_Documentation2.0.md" "RACEDAYSQL.sql"; do
             if [ ! -f "Docs/$f" ]; then
-              echo "Docs/$f missing!"
+              echo "❌ Docs/$f missing!"
               exit 1
             fi
           done
-          echo "Docs folder validated successfully."
+          echo "✅ Docs folder validated successfully."
