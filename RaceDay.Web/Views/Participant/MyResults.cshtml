@@ -1,0 +1,71 @@
+﻿@model List<System.Text.Json.JsonElement>
+@{
+    ViewData["Title"] = "My Results";
+}
+
+<div class="container mt-4">
+    <h1 class="text-primary fw-bold mb-4">🏆 My Race Results</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info shadow-sm">You don't have any recorded results yet. Keep training!</div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover table-striped mb-0 bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Event</th>
+                        <th>Category</th>
+                        <th>Finish Time</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var result in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">@result.GetProperty("eventName").GetString()</td>
+                            <td>@result.GetProperty("categoryName").GetString()</td>
+
+                            <td>
+                                @{
+                                    var finishTimeStr = "-";
+                                    if (result.TryGetProperty("finishTime", out var ft) && ft.ValueKind != System.Text.Json.JsonValueKind.Null)
+                                    {
+                                        finishTimeStr = ft.ToString();
+                                    }
+                                }
+                                @finishTimeStr
+                            </td>
+
+                            <td>
+                                @{
+                                    var positionStr = "-";
+                                    if (result.TryGetProperty("position", out var pos) && pos.ValueKind != System.Text.Json.JsonValueKind.Null)
+                                    {
+                                        positionStr = pos.GetInt32().ToString();
+                                    }
+                                }
+                                @positionStr
+                            </td>
+
+                            <td>
+                                @if (result.GetProperty("status").GetString() == "Finished")
+                                {
+                                    <span class="badge bg-success">Finished</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@result.GetProperty("status").GetString()</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

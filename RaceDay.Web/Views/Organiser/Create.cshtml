@@ -1,0 +1,70 @@
+﻿@model RaceDay.Web.DTOs.CreateEventRequest
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">🏁 Create a New Event</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+
+                    <!-- IMPORTANT: enctype is required for file uploads -->
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="fw-bold">Event Name</label>
+                            <input asp-for="Name" class="form-control" required placeholder="e.g. Cape Town Cycle Tour" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold">Date</label>
+                                <input asp-for="Date" type="datetime-local" class="form-control" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold">Event Type</label>
+                                <select asp-for="EventType" class="form-select" required>
+                                    <option value="Run">Run</option>
+                                    <option value="Walk">Walk</option>
+                                    <option value="Cycle">Cycle</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="fw-bold">Location</label>
+                                <input asp-for="Location" class="form-control" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold">Max Participants</label>
+                                <input asp-for="MaxParticipants" type="number" class="form-control" required min="1" />
+                            </div>
+                        </div>
+
+                        <!-- Azure Blob Storage File Upload Field -->
+                        <div class="mb-4 border p-3 rounded bg-light">
+                            <label class="fw-bold mb-2">Upload Event Banner Image</label>
+                            <input type="file" name="bannerImage" class="form-control" accept="image/*" />
+                            <small class="text-muted">This will be uploaded to Azure Blob Storage via the API.</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100 fw-bold fs-5">Create Event</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

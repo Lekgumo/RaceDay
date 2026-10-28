@@ -1,0 +1,76 @@
+﻿@model RaceDay.Web.DTOs.EventResponse
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Side: Event Info -->
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <span class="badge bg-warning text-dark mb-2 fs-6">@Model.EventType</span>
+                    <h1 class="fw-bold text-primary mb-3">@Model.Name</h1>
+                    <p class="lead">@Model.Description</p>
+
+                    <hr />
+
+                    <div class="row text-muted">
+                        <div class="col-sm-6 mb-2">
+                            <strong>📍 Location:</strong> @Model.Location
+                        </div>
+                        <div class="col-sm-6 mb-2">
+                            <strong>📅 Date:</strong> @Model.Date.ToString("f")
+                        </div>
+                        <div class="col-sm-6 mb-2">
+                            <strong>👤 Organiser:</strong> @Model.OrganiserName
+                        </div>
+                        <div class="col-sm-6 mb-2">
+                            <strong>👥 Max Participants:</strong> @Model.MaxParticipants
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Categories & Enrolment -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-dark text-white">
+                <div class="card-header bg-warning text-dark fw-bold">
+                    Available Categories
+                </div>
+                <div class="card-body">
+                    @if (Model.Categories != null && Model.Categories.Any())
+                    {
+                        foreach (var cat in Model.Categories)
+                        {
+                            <div class="mb-3 p-3 border border-secondary rounded">
+                                <h5 class="mb-1 text-warning">@cat.Name</h5>
+                                <p class="mb-1 small text-light">@cat.Description</p>
+                                <p class="mb-1 fw-bold">R @cat.EntryFee.ToString("F2")</p>
+                                <p class="mb-2 small text-muted">Capacity: @cat.EnrolledCount / @cat.MaxCapacity</p>
+
+                                @if (Context.Session.GetString("UserRole") == "Participant")
+                                {
+                                    <form asp-controller="Participant" asp-action="Enrol" method="post">
+                                        <input type="hidden" name="eventId" value="@Model.EventId" />
+                                        <input type="hidden" name="categoryId" value="@cat.CategoryId" />
+                                        <button type="submit" class="btn btn-warning w-100 fw-bold btn-sm">Enrol Now</button>
+                                    </form>
+                                }
+                                else if (Context.Session.GetString("UserRole") == null)
+                                {
+                                    <a asp-controller="Auth" asp-action="Login" class="btn btn-outline-light w-100 btn-sm">Login to Enrol</a>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No categories available yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

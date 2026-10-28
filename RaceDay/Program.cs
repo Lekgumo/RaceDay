@@ -22,6 +22,7 @@ builder.Services.AddSession(options =>
 // Services
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<BlobService>(); // <-- ADDED THIS LINE
 
 // Controllers + Swagger
 builder.Services.AddControllers();
@@ -41,24 +42,24 @@ var app = builder.Build();
 // Auto-apply migrations ONLY when using a relational database
 using (var scope = app.Services.CreateScope())
 {
-var db = scope.ServiceProvider.GetRequiredService<RaceDayDbContext>();
+    var db = scope.ServiceProvider.GetRequiredService<RaceDayDbContext>();
 
-// Only migrate when a relational provider (SQL Server) is registered
-if (db.Database.IsRelational())
-{
-db.Database.Migrate();
-}
+    // Only migrate when a relational provider (SQL Server) is registered
+    if (db.Database.IsRelational())
+    {
+        db.Database.Migrate();
+    }
 }
 
 // Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-c.SwaggerEndpoint("/swagger/v1/swagger.json", "RaceDay API v1");
-c.RoutePrefix = "swagger";
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "RaceDay API v1");
+        c.RoutePrefix = "swagger";
+    });
 }
 
 app.UseSession();
@@ -67,4 +68,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
-public partial class Program { }   // ← MUST be at the bottom
+public partial class Program { }   // ← MUST be at the bottom.

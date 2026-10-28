@@ -15,6 +15,9 @@ public class Event
 
     public string? Description { get; set; }
 
+    // ✨ NEW PROPERTY ADDED HERE
+    public string? BannerUrl { get; set; }
+
     [Required]
     public DateTime Date { get; set; }
 

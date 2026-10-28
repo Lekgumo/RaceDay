@@ -4,6 +4,7 @@ using RaceDay.Data;
 using RaceDay.DTOs;
 using RaceDay.Middleware;
 using RaceDay.Models;
+using RaceDay.Services;
 
 namespace RaceDay.Controllers;
 
@@ -13,6 +14,7 @@ namespace RaceDay.Controllers;
 public class EventsController : ControllerBase
 {
     private readonly RaceDayDbContext _db;
+
     public EventsController(RaceDayDbContext db) => _db = db;
 
     /// <summary>Lists all events. Public.</summary>
@@ -156,5 +158,38 @@ public class EventsController : ControllerBase
             forecast.Humidity,
             forecast.LastUpdated
         });
+    }
+
+    // ==========================================
+    // NEW UPLOAD ENDPOINT
+    // ==========================================
+    /// <summary>Uploads an event banner image to Azure Blob Storage. Organiser owner only.</summary>
+    [HttpPost("{id}/banner")]
+    public async Task<IActionResult> UploadBanner(int id, IFormFile file, [FromServices] BlobService blobService)
+    {
+        if (!HttpContext.IsAuthenticated()) return Unauthorized();
+        if (!HttpContext.IsInRole("Organiser")) return StatusCode(403);
+
+        var ev = await _db.Events.FindAsync(id);
+        if (ev == null) return NotFound(new { error = "Event not found." });
+        if (ev.OrganiserId != HttpContext.GetUserId()!.Value) return StatusCode(403);
+
+        if (file == null || file.Length == 0)
+            return BadRequest(new { error = "No file uploaded." });
+
+        try
+        {
+            var imageUrl = await blobService.UploadAsync(file);
+
+            // Save the URL to the database
+            ev.BannerUrl = imageUrl;
+            await _db.SaveChangesAsync();
+
+            return Ok(new { url = imageUrl });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = $"Failed to upload image: {ex.Message}" });
+        }
     }
 }

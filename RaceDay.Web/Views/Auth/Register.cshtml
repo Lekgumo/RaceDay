@@ -1,0 +1,52 @@
+﻿@model RaceDay.Web.DTOs.RegisterRequest
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow border-0">
+            <div class="card-body p-4">
+                <h2 class="text-center text-warning fw-bold mb-4">Join RaceDay</h2>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-action="Register" method="post">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label fw-bold">First Name</label>
+                            <input asp-for="FirstName" class="form-control" required />
+                        </div>
+                        <div class="col">
+                            <label class="form-label fw-bold">Last Name</label>
+                            <input asp-for="LastName" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input asp-for="Email" class="form-control" type="email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Password</label>
+                        <input asp-for="Password" class="form-control" type="password" required minlength="6" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">I am a:</label>
+                        <select asp-for="Role" class="form-select" required>
+                            <option value="Participant">Participant (Looking to race)</option>
+                            <option value="Organiser">Organiser (Hosting events)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 fw-bold text-dark">Register</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a asp-action="Login">Already have an account? Login here.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
