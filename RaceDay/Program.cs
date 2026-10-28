@@ -7,8 +7,17 @@ using RaceDay.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Database
-builder.Services.AddDbContext<RaceDayDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (connectionString == "InMemory")
+{
+    builder.Services.AddDbContext<RaceDayDbContext>(options =>
+        options.UseInMemoryDatabase("RaceDayDb"));
+}
+else
+{
+    builder.Services.AddDbContext<RaceDayDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
 
 // Session
 builder.Services.AddDistributedMemoryCache();
@@ -48,6 +57,10 @@ using (var scope = app.Services.CreateScope())
     if (db.Database.IsRelational())
     {
         db.Database.Migrate();
+    }
+    else
+    {
+        db.Database.EnsureCreated(); // <-- ADDED THIS for InMemory
     }
 }
 

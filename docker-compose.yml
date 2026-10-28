@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  raceday-api:
+    build:
+      context: .
+      dockerfile: RaceDay/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=InMemory
+
+  raceday-web:
+    build:
+      context: .
+      dockerfile: RaceDay.Web/Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ApiSettings__BaseUrl=http://raceday-api:8080
+    depends_on:
+      - raceday-api
