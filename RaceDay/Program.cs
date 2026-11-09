@@ -60,7 +60,7 @@ using (var scope = app.Services.CreateScope())
     }
     else
     {
-        db.Database.EnsureCreated(); // <-- ADDED THIS for InMemory
+        db.Database.EnsureCreated(); // <-- ADDED THIS for I
     }
 }
 

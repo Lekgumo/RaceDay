@@ -49,14 +49,17 @@
                     </ul>
 
                     <!-- Right Side Links (Auth) -->
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         @if (Context.Session.GetString("UserEmail") != null)
                         {
                             <li class="nav-item">
                                 <span class="nav-link text-light">👤 @Context.Session.GetString("UserName")</span>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Auth" asp-action="Logout">Logout</a>
+                                <!-- FIXED LOGOUT: Using a form to send a POST request -->
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline m-0">
+                                    <button type="submit" class="nav-link text-danger fw-bold" style="background:none; border:none; padding: 8px 16px;">Logout</button>
+                                </form>
                             </li>
                         }
                         else
