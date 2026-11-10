@@ -1,55 +1,77 @@
-RaceDay - Event Management System
+🏃 RaceDay - Event Management System
+https://github.com/Lekgumo/RaceDay/actions/workflows/build-and-test.yml/badge.svg
 
-[![Build and Test](https://github.com/YOUR-USERNAME/RaceDay/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/YOUR-USERNAME/RaceDay/actions/workflows/build-and-test.yml)
+A full-stack event management system for the South African road running, walking, and cycling community.
 
-> A full-stack RESTful API for managing road running, walking, and cycling events in South Africa.
+📖 System Description
+RaceDay is a full-stack application built with ASP.NET Core 8 and Entity Framework Core. The solution consists of three projects:
 
+RaceDay (API): A RESTful API with session-based authentication, Azure Blob Storage integration, and role-based access control.
 
-System Description
+RaceDay.Web (MVC): The frontend web application that consumes the API.
 
-RaceDay is a comprehensive event management platform built for the South African road running, walking, and cycling community. From the iconic Comrades Marathon and Cape Town Cycle Tour to community park runs and charity walks, RaceDay streamlines the entire event lifecycle.
+RaceDay.Tests: Unit tests for the API using xUnit.
 
-The system replaces paper-based registration, spreadsheets, and disconnected communication channels with a modern, secure, RESTful API. Organisers manage events and results; Participants browse, enrol, and track their performance history.
+👥 Roles
+Organiser: Can create and manage events, add categories, upload banner images, and record results.
 
+Participant: Can browse upcoming events, enrol in categories, and view their personal results history.
 
-Roles
+🚀 How to Run the Project
+Option 1: Using Docker (Recommended)
+The easiest way to run the entire stack (API + MVC) is using Docker.
 
-The system has two distinct user roles:
+Prerequisites:
 
-Organiser
-Event creators and managers. Can:
-- Register and log in with secure hashed credentials
-- Create, update, and delete events
-- Define multiple categories per event (e.g., 5km Walk, 21km Half Marathon, 42km Full Marathon)
-- Set entry fees, start times, and capacity limits per category
-- View all enrolments for their events
-- Record finish times and positions for participants
-- View event weather forecasts
+Docker Desktop installed and running on your machine.
 
-Participant
-Event attendees and competitors. Can:
-- Register and log in
-- Browse all upcoming events (publicly visible)
-- View event details and available categories
-- Enrol in categories (subject to capacity)
-- View personal enrolment history
-- Cancel their own enrolments
-- View personal performance results
+Steps:
 
-Technology Stack
+Open a terminal in the root folder of this repository.
 
-| Component | Technology |
-|-----------|------------|
-| **Framework** | ASP.NET Core 8 Web API |
-| **Database** | SQL Server (LocalDB for development) |
-| **ORM** | Entity Framework Core 8 (Code-First) |
-| **Authentication** | Session-based (custom middleware) |
-| **Password Hashing** | BCrypt.Net-Next |
-| **API Documentation** | Swagger (Swashbuckle) |
-| **Testing** | xUnit + FluentAssertions + InMemory DB |
-| **CI/CD** | GitHub Actions |
+Run the following command to build and start the containers:
 
+bash
+docker-compose up --build -d
+Once the containers are running, you can access the applications:
 
-Repository Structure
+MVC Web App: http://localhost:8081
 
-Youtube Link- https://youtu.be/z-6Q_pwXJ4s
+API Swagger UI: http://localhost:8080/swagger
+
+To stop the containers, run:
+
+bash
+docker-compose down
+(Note: The Docker setup uses an In-Memory database so it works out-of-the-box without needing a local SQL Server connection).
+
+Option 2: Running Locally (Visual Studio)
+If you prefer to run the application locally, you will need SQL Server LocalDB.
+
+Prerequisites:
+
+.NET 8 SDK
+
+Visual Studio 2022
+
+SQL Server Express LocalDB
+
+Steps:
+
+Open RaceDay.sln in Visual Studio.
+
+Right-click the Solution in Solution Explorer, select Configure Startup Projects, and choose Multiple startup projects.
+
+Set both RaceDay (API) and RaceDay.Web (MVC) to Start.
+
+Open the Package Manager Console (set Default project to RaceDay) and run:
+
+powershell
+Update-Database
+Press F5 to run both projects.
+
+The API Swagger UI will open automatically, and the MVC app will open at its designated port.
+
+🎥 Video Presentation
+Watch the Part 3 Walkthrough on YouTube
+

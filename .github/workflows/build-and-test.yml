@@ -22,10 +22,13 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore RaceDay.sln
 
-      - name: Build API project
+      - name: Build API Project
         run: dotnet build RaceDay/RaceDay.csproj --no-restore --configuration Release
 
-      - name: Build test project
+      - name: Build MVC Project
+        run: dotnet build RaceDay.Web/RaceDay.Web.csproj --no-restore --configuration Release
+
+      - name: Build Tests Project
         run: dotnet build RaceDay.Tests/RaceDay.Tests.csproj --no-restore --configuration Release
 
       - name: Run tests
